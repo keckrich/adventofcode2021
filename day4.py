@@ -1,5 +1,5 @@
-from textwrap import wrap
 import itertools
+from textwrap import wrap
 
 X = [l.strip() for l in open('in\\4.txt')]
 
@@ -19,22 +19,39 @@ boards = [[[int(z) for z in wrap(y, 3)] for y in x.split('\n')] for x in ('\n'.j
 # creates a list for each board where board[i][0] is how many numbers have been called from each row
 progress = [([0,0,0,0,0],[0,0,0,0,0]) for x in range(len(boards))]
 
-winner = None
+winner_p1 = None
+winner_p2 = None
 for n in numbers:
     for board_index in range(len(boards)):
+
+        # update the board progress if the number is on the board
         for j in range(5):
             if n in boards[board_index][j]:
                 progress[board_index][0][j] += 1
                 progress[board_index][1][boards[board_index][j].index(n)] += 1
                 break
 
-        if 5 in progress[board_index][0]:
-            winner = (board_index, n)
-            break
-    if winner:
-        break
+        # if 5 in progress[board_index][0] and not winner_p1:
+        #     winner_p1 = (board_index, n)
+        # elif 5 in progress[board_index][1] and len(boards) > 1:
+        #     winner_p2 = (board_index, n)
+        if 5 in progress[board_index][0] or 5 in progress[board_index][1]:
+            # reset progress of this board
+            progress[board_index] = ([0,0,0,0,0],[0,0,0,0,0])
+            # clear the board to -1
+            boards[board_index] = [[-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1]]
+            if not winner_p1:
+                winner_p1 = (board_index, n)
+            winner_p2 = (board_index, n)
+
+        
+boards = [[[int(z) for z in wrap(y, 3)] for y in x.split('\n')] for x in ('\n'.join(X)).split('\n\n')]
 
 
-flat_list = list(itertools.chain(*boards[winner[0]]))
-found_nums_sum = sum(x for x in flat_list if x in numbers[:numbers.index(winner[1])+1])
-print((sum(flat_list) - found_nums_sum) * winner[1])
+flat_list = list(itertools.chain(*boards[winner_p1[0]]))
+found_nums_sum = sum(x for x in flat_list if x in numbers[:numbers.index(winner_p1[1])+1])
+print((sum(flat_list) - found_nums_sum) * winner_p1[1])
+
+flat_list = list(itertools.chain(*boards[winner_p2[0]]))
+found_nums_sum = sum(x for x in flat_list if x in numbers[:numbers.index(winner_p2[1])+1])
+print((sum(flat_list) - found_nums_sum) * winner_p2[1])
