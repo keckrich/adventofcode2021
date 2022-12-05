@@ -42,7 +42,7 @@ for n in numbers:
                 winner_p1 = (board_index, n)
             winner_p2 = (board_index, n)
 
-        
+# reinitalize the boards  
 boards = [[[int(z) for z in wrap(y, 3)] for y in x.split('\n')] for x in ('\n'.join(X)).split('\n\n')]
 
 
