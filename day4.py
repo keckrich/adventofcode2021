@@ -31,10 +31,8 @@ for n in numbers:
                 progress[board_index][1][boards[board_index][j].index(n)] += 1
                 break
 
-        # if 5 in progress[board_index][0] and not winner_p1:
-        #     winner_p1 = (board_index, n)
-        # elif 5 in progress[board_index][1] and len(boards) > 1:
-        #     winner_p2 = (board_index, n)
+        # check if the board has a winner and update the winner if it does
+        # clear the board and progress if it has a winner
         if 5 in progress[board_index][0] or 5 in progress[board_index][1]:
             # reset progress of this board
             progress[board_index] = ([0,0,0,0,0],[0,0,0,0,0])
